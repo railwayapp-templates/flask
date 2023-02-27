@@ -19,5 +19,14 @@ This is a [Flask](https://flask.palletsprojects.com/en/1.1.x/) app that serves a
 
 ## 💁‍♀️ How to use
 
-- Install Python requirements `pip install -r requirements.txt`
-- Start the server for development `python3 main.py`
+- Install Python requirements
+
+```sh
+poetry install
+```
+
+- Start the server for development
+
+```sh
+poetry run python3 main.py
+```
