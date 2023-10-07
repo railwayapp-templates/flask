@@ -5,3 +5,5 @@ itsdangerous==1.1.0
 Jinja2==2.11.3
 MarkupSafe==1.1.1
 Werkzeug==1.0.1
+Pandas==1.1.5
+numpy==1.19.4
