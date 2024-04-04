@@ -60,6 +60,14 @@ def fnGetChismes():
         print("Error al obtener el chisme:", e)
         return jsonify(ResponseMessage.message500)
 
+@app.route('/maslikes', methods=['GET'])
+def fnGetmaslikes():
+    try:
+        objResult = callMethodPost.maslikes()  # Llama a la función directamente
+        return objResult
+    except Exception as e:
+        print("Error al obtener el chisme:", e)
+        return jsonify(ResponseMessage.message500)
 
 if __name__ == '__main__':
     app.run(debug=True, port=os.getenv("PORT", default=5000))

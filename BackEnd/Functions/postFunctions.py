@@ -1,6 +1,6 @@
 from flask import request, jsonify
 from pymongo import MongoClient
-from bson import ObjectId
+from bson import ObjectId,json_util
 from flask_cors import CORS
 import BackEnd.GlobalInfo.Keys as PracticaKeys
 import BackEnd.GlobalInfo.ResponseMessages as ResponseMessages
@@ -91,3 +91,20 @@ def serialize_doc(doc):
     if isinstance(doc, dict):
         return {key: str(value) if isinstance(value, ObjectId) else value for key, value in doc.items()}
     return doc
+
+def maslikes():
+    try:
+        # Buscar el chisme con más likes
+        chisme = dbConnPost.find_one(sort=[('intLikes', -1)])
+
+        if chisme:
+            # Convertir ObjectId a string
+            chisme['_id'] = str(chisme['_id'])
+            # Devolver toda la información del chisme como respuesta JSON
+            return jsonify(chisme), 200
+        else:
+            return jsonify({'error': 'No hay chismes disponibles'}), 404
+    except Exception as e:
+        return jsonify({'error': 'Error interno del servidor'}), 500
+
+    
