@@ -64,3 +64,30 @@ def postChisme():
     except Exception as e:
         print('Error al agregar chisme', e)
         return jsonify(ResponseMessages.message500), 500
+    
+    
+def obtener_chismes():
+    try:
+        data = request.get_json()
+        categoria = data.get('categoria')
+        if not categoria:
+            return jsonify({'error': 'No se proporcionó una categoría'}), 400
+
+        categorias_permitidas = ['Amor', 'Avisos', 'Preguntas', 'Memes', 'Confesiones']
+        if categoria not in categorias_permitidas:
+            return jsonify({'error': 'Categoría no permitida'}), 400
+
+        chismes_categoria = dbConnPost.find({'strCategoria': categoria})
+
+        # Convertir ObjectId a cadenas en cada documento
+        chismes_categoria = [serialize_doc(chisme) for chisme in chismes_categoria]
+
+        return jsonify(chismes_categoria), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+def serialize_doc(doc):
+    """Convierte ObjectId a cadenas en un documento"""
+    if isinstance(doc, dict):
+        return {key: str(value) if isinstance(value, ObjectId) else value for key, value in doc.items()}
+    return doc

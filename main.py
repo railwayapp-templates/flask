@@ -50,7 +50,15 @@ def fnPostUser():
     except Exception as e:
         print("Error al crear Usuario:", e)
         return jsonify(ResponseMessage.message500)
-    
+
+@app.route('/obtener', methods=['GET'])
+def fnGetChismes():
+    try:
+        objResult = callMethodPost.obtener_chismes()  # Llama a la función directamente
+        return objResult
+    except Exception as e:
+        print("Error al obtener el chisme:", e)
+        return jsonify(ResponseMessage.message500)
 
 
 if __name__ == '__main__':
