@@ -34,26 +34,33 @@ def postChisme():
     try:
         data = request.get_json()
         titulo = data.get('strTitulo')
+        categoria = data.get('strCategoria')
         likes = data.get('intLikes')
         dislikes = data.get('intDislikes')
         chisme = data.get('strChisme')
         usuario = data.get('strUsuario')
-        
-        nuevo_chisme = {
-            'strTitulo': titulo,
-            'intLikes': likes,
-            'intDislikes': dislikes,
-            'strChisme': chisme,
-            'strUsuario': usuario,
-        }
-        
-        resultado = dbConnPost.insert_one(nuevo_chisme)
-        
-        if resultado.inserted_id:
-            nuevo_chisme['_id'] = str(resultado.inserted_id)
-            return jsonify(nuevo_chisme), 200
+
+        categorias_permitidas = ['Amor', 'Memes', 'Preguntas', 'Confesiones', 'Avisos']
+
+        if categoria.capitalize() in categorias_permitidas:
+            nuevo_chisme = {
+                'strTitulo': titulo,
+                'strCategoria': categoria,
+                'intLikes': likes,
+                'intDislikes': dislikes,
+                'strChisme': chisme,
+                'strUsuario': usuario,
+            }
+
+            resultado = dbConnPost.insert_one(nuevo_chisme)
+
+            if resultado.inserted_id:
+                nuevo_chisme['_id'] = str(resultado.inserted_id)
+                return jsonify(nuevo_chisme), 200
+            else:
+                return jsonify(ResponseMessages.message500), 500
         else:
-            return jsonify(ResponseMessages.message500), 500
+            return "La categoría proporcionada no es válida. Por favor, elige una de las siguientes categorías: Amor, Memes, Preguntas, Confesiones, Avisos"
     except Exception as e:
         print('Error al agregar chisme', e)
         return jsonify(ResponseMessages.message500), 500
