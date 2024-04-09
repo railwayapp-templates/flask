@@ -1,6 +1,7 @@
 from flask import jsonify, request
 from pymongo import MongoClient
 from bson import ObjectId
+from bson.binary import Binary
 from flask_cors import CORS
 import BackEnd.GlobalInfo.Keys as PracticaKeys
 import BackEnd.GlobalInfo.ResponseMessages as ResponseMessages
@@ -58,3 +59,30 @@ def postUsuario():
         print('Error al agregar chisme', e)
         return jsonify(ResponseMessages.message500)
     
+    
+    
+def postAvatar():
+    try:
+        strUsuario = request.form['strUsuario']
+        return setAvatar(strUsuario)
+    except Exception as e:
+        print("Error al procesar la solicitud:", e)
+        return jsonify(ResponseMessages.message500)
+
+    
+def setAvatar(strUsuario):
+    try:
+        binImagen = request.files['imagen']
+        datosImagen = binImagen.read()
+    
+        resultado = dbConnUsers.update_one({'strUsuario': strUsuario}, {'$set': {'binAvatar': datosImagen}})
+        
+        if resultado.modified_count == 1:
+            return jsonify({'mensaje': 'Imagen subida correctamente'}), 200
+        else:
+            return jsonify({'mensaje': 'Usuario no encontrado'}), 404
+    except Exception as e:
+        print("Error al subir imagen:", e)
+        return jsonify(ResponseMessages.message500)
+    
+
