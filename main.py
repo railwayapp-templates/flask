@@ -50,6 +50,45 @@ def fnPostUser():
     except Exception as e:
         print("Error al crear Usuario:", e)
         return jsonify(ResponseMessage.message500)
+    
+@app.route('/avatar', methods=['POST'])
+def fnPostAvatar():
+    try:
+        objResult = callMethodUser.postAvatar()
+        return objResult
+    except Exception as e:
+        print("Error al subir imagen:", e)
+        return jsonify(ResponseMessage.message500)
+    
+    
+@app.route('/image', methods=['POST'])
+def fnPostImage():
+    try:
+        objResult = callMethodPost.postImage()
+        return objResult
+    except Exception as e:
+        print("Error al subir imagen:", e)
+        return jsonify(ResponseMessage.message500)
+    
+@app.route('/<string:_id>/likes', methods=['POST'])
+def fnPostLikes(_id):
+    try:
+        objResult = callMethodPost.postLikes(_id)
+        return objResult
+    except Exception as e:
+        print("Error al subir imagen:", e)
+        return jsonify(ResponseMessage.message500)
+    
+@app.route('/<string:_id>/dislikes', methods=['POST'])
+def fnPostDislikes(_id):
+    try:
+        objResult = callMethodPost.postDislikes(_id)
+        return objResult
+    except Exception as e:
+        print("Error al subir imagen:", e)
+        return jsonify(ResponseMessage.message500)
+    
+    
 
 @app.route('/obtener', methods=['GET'])
 def fnGetChismes():
