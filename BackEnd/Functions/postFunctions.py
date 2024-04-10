@@ -22,13 +22,20 @@ def getChisme():
         for colab in listColab:
             # Convierto el ObjectId en string para que me lo acepte el programa
             colab['_id'] = str(colab['_id'])
+
+            # Convertir bytes a formato hexadecimal
+            for key, value in colab.items():
+                if isinstance(value, bytes):
+                    colab[key] = value.hex()
         
         # Crear un diccionario con la clave 'Response' y la lista de colaboradores como valor
         response_data = {'Response': listColab}
         return jsonify(response_data)
     except Exception as e:
-        print("error get colaboradores:", e)
-        return jsonify(ResponseMessages.message500)
+        print("Error al obtener los colaboradores:", e)
+        # Si ocurre algún error, devuelve un mensaje de error interno del servidor
+        return jsonify({"error": str(e), "message": "Ha ocurrido un error al obtener los colaboradores"})
+
 
 def postChisme():
     try:
