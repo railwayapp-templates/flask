@@ -1,5 +1,3 @@
-import base64
-from msilib import Binary
 from flask import request, jsonify
 from pymongo import MongoClient
 from bson import ObjectId
@@ -38,14 +36,11 @@ def postChisme():
         titulo = data.get('strTitulo')
         chisme = data.get('strChisme')
         usuario = data.get('strUsuario')
-        categoria = data.get('strCategoria')
         
         nuevo_chisme = {
             'strTitulo': titulo,
             'strChisme': chisme,
             'strUsuario': usuario,
-            'strCategoria': categoria,
-            
         }
         
         resultado = dbConnPost.insert_one(nuevo_chisme)
@@ -97,14 +92,10 @@ def postImage():
     
 def setImage(strTitulo):
     try:
-        binImage = request.files['imagen']
-        datosImagen = binImage.read()
-        
-        # Convertir los datos de la imagen a formato base64
-        datosImagenBase64 = base64.b64encode(datosImagen).decode('utf-8')
-        
-        # Almacenar los datos en MongoDB como un objeto BinData en formato base64
-        resultado = dbConnPost.update_one({'strTitulo': strTitulo}, {'$set': {'binImage': datosImagenBase64}})
+        binImagen = request.files['imagen']
+        datosImagen = binImagen.read()
+    
+        resultado = dbConnPost.update_one({'strTitulo': strTitulo}, {'$set': {'binImage': datosImagen}})
         
         if resultado.modified_count == 1:
             return jsonify({'mensaje': 'Imagen subida correctamente'}), 200
