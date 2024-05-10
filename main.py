@@ -8,8 +8,9 @@ def webhook():
     print(request.json)
     return '', 200
 
-@app.route('/', methods=['GET'])
+@app.route('/hi', methods=['GET'])
 def hello_world():
+    print("Hello, World!")
     return jsonify({"Hello": "Hello World"})
 
 if __name__ == '__main__':
